@@ -25,21 +25,21 @@ class SaleServices extends BaseServices<any> {
       throw new CustomError(400, `${quantity} product are not available in stock!`);
     }
     let result: any[];
-    const session = await mongoose.startSession();
+    // const session = await mongoose.startSession();
 
     try {
-      session.startTransaction();
+      // session.startTransaction();
 
-      await Product.findByIdAndUpdate(product?._id, { $inc: { stock: -quantity } }, { session });
-      result = await this.model.create([payload], { session });
-      await session.commitTransaction();
+      await Product.findByIdAndUpdate(product?._id, { $inc: { stock: -quantity } });
+      result = await this.model.create([payload]);
+      // await session.commitTransaction();
 
       return result;
     } catch (error) {
-      await session.abortTransaction();
+      // await session.abortTransaction();
       throw new CustomError(400, 'Sale create failed');
     } finally {
-      await session.endSession();
+      // await session.endSession();
     }
   }
 
